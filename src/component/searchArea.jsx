@@ -15,8 +15,8 @@ const SearchArea = () => {
             return cus
         })
         // console.log(formatting)
-        // setOptions(formatting)
-    })
+        setOptions(formatting)
+    }, [])
 
 
     const onSearch = (searchText) => {
