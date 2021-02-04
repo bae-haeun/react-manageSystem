@@ -71,7 +71,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                         >
                             <Select defaultValue="업무구분" onChange={handleChange}>
                                 {workType.map((type) => {
-                                    return <Option value={type.code_id}>{type.code_nm}</Option>
+                                    return <Option id={type.code_id} value={type.code_id}>{type.code_nm}</Option>
                                 })}
 
                             </Select>
@@ -90,7 +90,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                     >
                         <Select defaultValue="고객사" onChange={handleChange}>
                             {customer.map((cus) => {
-                                return <Option value={cus.customer_id}>{cus.customer_nm}</Option>
+                                return <Option id={cus.customer_id} value={cus.customer_id}>{cus.customer_nm}</Option>
                             })}
 
                         </Select>

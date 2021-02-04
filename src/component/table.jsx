@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Dialog from './historyDialog'
@@ -8,6 +8,16 @@ import { Row, Col, Divider } from 'antd';
 
 
 import { Table, Tag, Radio, Space } from 'antd';
+
+import axios from 'axios'
+import {
+    lookupHistory,
+    createHistory,
+    updateHistory,
+    deleteHistory,
+    searchOption,
+} from '../api/history'
+import SearchArea from './searchArea';
 
 
 const headers = [
@@ -106,6 +116,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const searchData = {
+    user_nm: null,
+    customer_id: null,
+    work_flag_id: null,
+    work_content_id: null,
+    work_type_id: null,
+    searchStartDate: null,
+    searchEndDate: null,
+    page: 1,
+    itemsPerPage: 10,
+}
+
 
 export default function StickyHeadTable() {
 
@@ -113,6 +135,24 @@ export default function StickyHeadTable() {
 
     //state 변수 open 선언, setOpen으로 세팅
     const [open, setOpen] = useState(false)
+
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+
+        try {
+            // const { data, status } = lookupHistory(searchData)
+            lookupHistory(searchData).then((res) => {
+                const { history } = res.data
+                // console.log("get data ====== ", history)
+                setData(history)
+            })
+        } catch (err) {
+            console.error(err)
+            // return Promise.reject(err)
+        }
+
+    }, [])
 
     const handleClickOpen = () => {
         console.log("open dialog")
@@ -134,6 +174,8 @@ export default function StickyHeadTable() {
                     </Dialog>
 
                     <Button type="default">검색 조건</Button>
+                    <SearchArea></SearchArea>
+
                 </Col>
             </Row>
 
@@ -141,7 +183,7 @@ export default function StickyHeadTable() {
             <Divider orientation="left"></Divider>
             <Table
                 columns={headers}
-                dataSource={rows}
+                dataSource={data}
                 showHeader={true}
             />
 

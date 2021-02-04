@@ -7,15 +7,15 @@ import {
     VideoCameraOutlined,
     UploadOutlined,
 } from '@ant-design/icons';
-import Header from './header'
+// import Header from './header'
 import Table from '../table'
 import './menubar.css'
-
+const { Header, Sider, Content } = Layout;
 
 export default function Menubar() {
 
-    const [collapsed, setCollapsed] = useState(false)
-    const { Sider, Content } = Layout;
+    const [collapsed, setCollapsed] = useState(true)
+    // const { Sider, Content } = Layout;
     // const state = {
     //     collapsed: false,
     // };
@@ -31,7 +31,7 @@ export default function Menubar() {
 
     return (
         <Layout style={{
-            height: '100vw',
+            height: '100vh',
             width: '100vw'
         }}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -49,14 +49,16 @@ export default function Menubar() {
                 </Menu>
             </Sider>
             <Layout className="site-layout">
-                {/* <Header className="site-layout-background" style={{ padding: 0 }}>
-                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                <Header className="site-layout-background" style={{ padding: 0 }}>
+                    {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                         className: 'trigger',
                         onClick: toggle,
-                    })}
-                </Header> */}
-                <Header collapsed={collapsed} setCollapsed={setCollapsed}>
+                    })} */}
+                    <img src={'/images/logo.png'} className='trigger'
+                        onClick={toggle} />
                 </Header>
+                {/* <Header collapsed={collapsed} setCollapsed={setCollapsed}>
+                </Header> */}
                 <Content
                     className="site-layout-background"
                     style={{
