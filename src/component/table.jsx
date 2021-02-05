@@ -136,6 +136,8 @@ export default function StickyHeadTable() {
     //state 변수 open 선언, setOpen으로 세팅
     const [open, setOpen] = useState(false)
 
+    const [searchOpen, setSearchOpen] = useState(false)
+
     const [data, setData] = useState([])
 
     useEffect(() => {
@@ -154,10 +156,16 @@ export default function StickyHeadTable() {
 
     }, [])
 
-    const handleClickOpen = () => {
+    const openDialog = () => {
         console.log("open dialog")
         setOpen(true)
 
+    }
+
+    const openSearchArea = () => {
+
+        setSearchOpen(!searchOpen)
+        console.log(searchOpen)
     }
 
     return (
@@ -169,22 +177,23 @@ export default function StickyHeadTable() {
                 <Col className="gutter-row" span={12}>
                 </Col>
                 <Col className="gutter-row" span={6}>
-                    <Button type="primary" onClick={handleClickOpen}>내역 추가</Button>
+                    <Button type="primary" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={openDialog}>내역 추가</Button>
                     <Dialog open={open} setOpen={setOpen} >
                     </Dialog>
 
-                    <Button type="default">검색 조건</Button>
-                    <SearchArea></SearchArea>
+                    <Button type="default" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={openSearchArea}>검색 조건</Button>
+
 
                 </Col>
             </Row>
-
+            <SearchArea searchOpen={searchOpen} setSearchOpen={setSearchOpen} ></SearchArea>
 
             <Divider orientation="left"></Divider>
             <Table
                 columns={headers}
                 dataSource={data}
                 showHeader={true}
+            // onRow
             />
 
         </>

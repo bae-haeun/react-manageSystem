@@ -45,7 +45,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                 <Button key="back" onClick={handleClose}>
                     닫기
             </Button>,
-                <Button key="submit" type="primary" onClick={onFinish} htmlType="submit">
+                <Button key="submit" type="primary" form='form' htmlType="submit">
                     저장
             </Button>,
             ]}
@@ -55,6 +55,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
+                id='form'
             >
                 <Row>
                     <Col style={{ width: '50%' }}>
@@ -71,7 +72,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                         >
                             <Select defaultValue="업무구분" onChange={handleChange}>
                                 {workType.map((type) => {
-                                    return <Option id={type.code_id} value={type.code_id}>{type.code_nm}</Option>
+                                    return <Option id={type.code_id} value={type.code_id} key={type.code_id}>{type.code_nm}</Option>
                                 })}
 
                             </Select>
