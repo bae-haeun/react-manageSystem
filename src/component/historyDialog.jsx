@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Row, Col } from 'antd';
 import { Form, Button, Checkbox } from 'antd';
 import { Select } from 'antd';
@@ -7,10 +7,21 @@ import { Input, InputNumber } from 'antd';
 
 const { Option } = Select;
 
+const HistoryDialog = ({ open, setOpen, record, setRecord, flag, setFlag }) => {
 
-const HistoryDialog = ({ open, setOpen }) => {
+    // console.log(record)
+    // console.log(flag)
 
     const [history, setHistroy] = useState([])
+
+    useEffect((record, flag) => {
+        //레코드 데이터 확인 및 수정데이터 세팅 하기
+        setRecord(record)
+        setFlag(flag)
+        console.log("현재 record     ", record)
+        console.log("구분    ", flag)
+
+    }, [])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -70,9 +81,9 @@ const HistoryDialog = ({ open, setOpen }) => {
                             ]}
 
                         >
-                            <Select defaultValue="업무구분" onChange={handleChange}>
-                                {workType.map((type) => {
-                                    return <Option id={type.code_id} value={type.code_id} key={type.code_id}>{type.code_nm}</Option>
+                            <Select onChange={handleChange}>
+                                {workType.map((type, index) => {
+                                    return <Option id={type.code_id} value={type.code_id} key={index}>{type.code_nm}</Option>
                                 })}
 
                             </Select>
@@ -89,9 +100,9 @@ const HistoryDialog = ({ open, setOpen }) => {
                             },
                         ]}
                     >
-                        <Select defaultValue="고객사" onChange={handleChange}>
-                            {customer.map((cus) => {
-                                return <Option id={cus.customer_id} value={cus.customer_id}>{cus.customer_nm}</Option>
+                        <Select onChange={handleChange}>
+                            {customer.map((cus, index) => {
+                                return <Option id={cus.customer_id} value={cus.customer_id} key={index}>{cus.customer_nm}</Option>
                             })}
 
                         </Select>
@@ -111,7 +122,7 @@ const HistoryDialog = ({ open, setOpen }) => {
                                 },
                             ]}
                         >
-                            <InputNumber min={1} defaultValue={0} onChange={handleChange} />
+                            <InputNumber min={1} initialValues={0} onChange={handleChange} />
                         </Form.Item>
                     </Col>
                     <Col style={{ width: '50%' }}></Col>

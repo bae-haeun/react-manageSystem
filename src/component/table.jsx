@@ -7,7 +7,7 @@ import { Button } from 'antd';
 import { Row, Col, Divider } from 'antd';
 
 
-import { Table, Tag, Radio, Space } from 'antd';
+import { Table, Tag, Radio, Space, Pagination } from 'antd';
 
 import axios from 'axios'
 import {
@@ -134,31 +134,76 @@ export default function StickyHeadTable() {
     const { Title } = Typography;
 
     //state 변수 open 선언, setOpen으로 세팅
+    //내역 추가 팝업 오픈 여부
     const [open, setOpen] = useState(false)
 
+    //검색 조건 부분 오픈 여부
     const [searchOpen, setSearchOpen] = useState(false)
 
+    //현재 페이지에 노출될 데이터 10건
     const [data, setData] = useState([])
+
+    //총 생성될 페이지수 
+    const [total, setTotal] = useState(0)
+
+    const [current, setCurrent] = useState(1)
+
+    //pagination 될때마다 데이터 바꿔서 검색
+    const [searchData, setSearchData] = useState({
+        user_nm: null,
+        customer_id: null,
+        work_flag_id: null,
+        work_content_id: null,
+        work_type_id: null,
+        searchStartDate: null,
+        searchEndDate: null,
+        page: 1,
+        itemsPerPage: 10,
+    })
+
+    const [record, setRecord] = useState({})
+    const [flag, setFlag] = useState('')
 
     useEffect(() => {
 
         try {
             // const { data, status } = lookupHistory(searchData)
             lookupHistory(searchData).then((res) => {
-                const { history } = res.data
-                // console.log("get data ====== ", history)
+                const { history, total } = res.data
+
                 setData(history)
+
+                setTotal(total)
+
+                // console.log("check data", history);
+
             })
         } catch (err) {
             console.error(err)
             // return Promise.reject(err)
         }
 
-    }, [])
+    }, [searchData])
 
-    const openDialog = () => {
-        console.log("open dialog")
+
+    const onChange = (pageNumber) => {
+        setSearchData({ page: pageNumber.current, itemsPerPage: 10 })
+    }
+
+    const openDialog = (flag, record) => {
+        // console.log("open dialog")
+        setFlag(flag)
+
+        if (flag === 'update') {
+            setRecord(record)
+
+        } else {
+            setRecord({})
+        }
         setOpen(true)
+
+        // console.log(flag)
+        // console.log(record)
 
     }
 
@@ -177,8 +222,8 @@ export default function StickyHeadTable() {
                 <Col className="gutter-row" span={12}>
                 </Col>
                 <Col className="gutter-row" span={6}>
-                    <Button type="primary" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={openDialog}>내역 추가</Button>
-                    <Dialog open={open} setOpen={setOpen} >
+                    <Button type="primary" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={() => openDialog('create', {})}>내역 추가</Button>
+                    <Dialog open={open} setOpen={setOpen} record={record} setRecord={setRecord} flag={flag} setFlag={setFlag}>
                     </Dialog>
 
                     <Button type="default" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={openSearchArea}>검색 조건</Button>
@@ -190,11 +235,30 @@ export default function StickyHeadTable() {
 
             <Divider orientation="left"></Divider>
             <Table
+                key={data.work_hist_id}
                 columns={headers}
                 dataSource={data}
                 showHeader={true}
+                pagination={{
+                    total: total,
+                    pageSize: 10,
+                    hideOnSinglePage: false,
+
+                }}
+                onChange={onChange}
+                onRow={(record, rowIndex) => {
+                    return {
+                        onClick: event => {
+                            // console.log(record);    //row data
+                            openDialog('update', record)
+                        }
+                    }
+                }}
             // onRow
-            />
+            >
+                {/* <Pagination current={current} total={100} onChange={onChange}></Pagination> */}
+            </Table>
+
 
         </>
 

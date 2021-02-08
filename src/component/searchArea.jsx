@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Divider } from 'antd';
-import { AutoComplete } from 'antd';
+import { AutoComplete, Input } from 'antd';
 import { searchOption } from '../api/history'
 import { workType, customer, solutions, workFlag, workContent } from '../searchOptions.js'
 import { Form, Button, Checkbox } from 'antd';
+import { DatePicker, Space } from 'antd';
+
+const { RangePicker } = DatePicker;
+const { Option } = AutoComplete;
 
 const SearchArea = ({ searchOpen, setSearchOpen }) => {
     const [value, setValue] = useState('');
@@ -14,6 +18,10 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
     const [workFlag, setWorkFlag] = useState([])
     const [customer, setCustomer] = useState([])
     const [solution, setSolution] = useState([])
+
+    const [customerValue, setCustomerValue] = useState('')
+    const [defaultCustomList] = useState([...customer])
+
 
     // const testOptions = async () => {
     //     try {
@@ -51,11 +59,14 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
         }
 
         testOptions().then((res) => {
+
             const formatting = res.map(cus => {
                 const value = cus.customer_id
                 const label = cus.customer_nm
-                cus.value = value
-                cus.label = label
+                // cus.value = value
+                // cus.label = label
+                cus.value = label;
+                cus.key = value;
                 return cus
             })
             setCustomer(formatting)
@@ -73,11 +84,23 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
 
     const onSearch = (searchText) => {
         console.log('onSearch', searchText)
+
+
+        // let filtered = defaultCustomList.filter(
+        //     obj =>
+        //         obj.value
+        //             .toString()
+        //             .includes(searchText)
+        // );
+        // console.log(filtered)
+        // setCustomer(filtered)
     };
 
     const onSelect = (data, option) => {
-        console.log('onSelect data', data);
-        console.log('onSelect option', option);
+        console.log(data);
+
+        setCustomerValue(option.customer_id)
+        // console.log('onSelect option', customerValue);
     };
 
     const onFinish = (values) => {
@@ -92,12 +115,12 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
     return (
         <Form
             hidden={searchOpen}
-            name="basic"
+            name="searchForm"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            <Row style={{ padding: '10px' }}>
+            <Row style={{ padding: '5px' }}>
                 <Col span={6} >
                     <Form.Item
                         label="고객사"
@@ -105,14 +128,16 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
                     // style={{ margin: '20px' }}
                     >
                         <AutoComplete
-                            options={customer}
                             style={{
                                 width: 200,
                             }}
                             onSelect={onSelect}
-                            onSearch={onSearch}
-                            placeholder="input here"
-                        /></Form.Item>
+                            options={customer}
+                        >
+                            {/* <Input.Search size="large"></Input.Search> */}
+                        </AutoComplete>
+
+                    </Form.Item>
                 </Col>
                 <Col span={6}>
                     <Form.Item
@@ -121,15 +146,8 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
                     // style={{ margin: '20px' }}
 
                     >
-                        <AutoComplete
-                            options={options}
-                            style={{
-                                width: 200,
-                            }}
-                            onSelect={onSelect}
-                            onSearch={onSearch}
-                            placeholder="input here"
-                        /></Form.Item>
+                        <RangePicker />
+                    </Form.Item>
                 </Col>
                 <Col span={6}>
                     <Form.Item
@@ -150,7 +168,7 @@ const SearchArea = ({ searchOpen, setSearchOpen }) => {
                 </Col>
 
                 <Col span={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Button type="primary" >검색</Button>
+                    <Button form="searchForm" htmlType="submit" type="primary" >검색</Button>
                 </Col>
             </Row>
 
