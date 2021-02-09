@@ -6,7 +6,6 @@ import { Typography } from 'antd';
 import { Button } from 'antd';
 import { Row, Col, Divider } from 'antd';
 
-
 import { Table, Tag, Radio, Space, Pagination } from 'antd';
 
 import axios from 'axios'
@@ -165,6 +164,7 @@ export default function StickyHeadTable() {
     const [flag, setFlag] = useState('')
 
     useEffect(() => {
+        // console.log("history 가져오기")
 
         try {
             // const { data, status } = lookupHistory(searchData)
@@ -195,15 +195,17 @@ export default function StickyHeadTable() {
         setFlag(flag)
 
         if (flag === 'update') {
-            setRecord(record)
+            setRecord({ ...record })
+
 
         } else {
             setRecord({})
         }
+
         setOpen(true)
 
         // console.log(flag)
-        // console.log(record)
+        console.log(record)
 
     }
 
@@ -235,7 +237,7 @@ export default function StickyHeadTable() {
 
             <Divider orientation="left"></Divider>
             <Table
-                key={data.work_hist_id}
+                rowKey={data.work_hist_id}
                 columns={headers}
                 dataSource={data}
                 showHeader={true}
@@ -256,7 +258,6 @@ export default function StickyHeadTable() {
                 }}
             // onRow
             >
-                {/* <Pagination current={current} total={100} onChange={onChange}></Pagination> */}
             </Table>
 
 
