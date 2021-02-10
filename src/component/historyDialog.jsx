@@ -47,28 +47,46 @@ const HistoryDialog = ({ open, setOpen, record, setRecord, flag, setFlag }) => {
 
     const handleClose = () => {
         setOpen(false);
-
+        setRecord({})
     };
 
     const onFinish = async (values) => {
+
+        console.log(flag)
         // 입력받은 데이터 확인
-        console.log('지원일자:', (values.work_date).format('YYYYMMDD'));
         values.work_date = (values.work_date).format('YYYYMMDD')
 
-        console.log(dialogForm.getFieldValue("work_hist_id"))
+        if (flag === 'create') {
+            console.log(values)
 
-        const id = dialogForm.getFieldValue("work_hist_id")
+            try {
+                const { data, status } = await createHistory(values)
+                console.log(data)
+                console.log(status)
+            } catch (err) {
+                console.error(err)
+            }
 
-        try {
-            const { status } = await updateHistory(id, values)
+        } else {
+            const id = dialogForm.getFieldValue("work_hist_id")
 
-            //status = 200 이면 성공
-            // console.log(status)
-        } catch (error) {
-            console.error(error)
+            try {
+                const { status } = await updateHistory(id, values)
+
+                //status = 200 이면 성공
+                // console.log(status)
+            } catch (error) {
+                console.error(error)
+            }
         }
+        // console.log('지원일자:', (values.work_date).format('YYYYMMDD'));
 
-        handleClose()
+
+        // console.log(dialogForm.getFieldValue("work_hist_id"))
+
+
+
+        // handleClose()
 
     };
 
