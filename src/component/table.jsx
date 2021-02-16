@@ -137,7 +137,7 @@ export default function StickyHeadTable() {
     const [open, setOpen] = useState(false)
 
     //검색 조건 부분 오픈 여부
-    const [searchOpen, setSearchOpen] = useState(false)
+    const [searchOpen, setSearchOpen] = useState(true)
 
     //현재 페이지에 노출될 데이터 10건
     const [data, setData] = useState([])
@@ -183,7 +183,7 @@ export default function StickyHeadTable() {
             // return Promise.reject(err)
         }
 
-    }, [searchData])
+    }, [searchData, open])
 
 
     const onChange = (pageNumber) => {
@@ -199,13 +199,30 @@ export default function StickyHeadTable() {
 
 
         } else {
-            setRecord({})
+            setRecord({
+                customer_id: "",
+                customer_nm: "",
+                move_time_min: 0,
+                solution_id: "",
+                solution_nm: "",
+                user_nm: "",
+                work_content: "",
+                work_content_detail: "",
+                work_content_id: "",
+                // work_date: "",
+                work_flag: "",
+                work_flag_id: "",
+                work_hist_id: "",
+                work_time_min: 0,
+                work_type: "",
+                work_type_id: ""
+            })
         }
 
         setOpen(true)
 
         // console.log(flag)
-        console.log(record)
+        console.log("record when opening dialog. ", record)
 
     }
 
