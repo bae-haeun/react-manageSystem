@@ -254,7 +254,6 @@ export default function StickyHeadTable() {
 
             <Divider orientation="left"></Divider>
             <Table
-                rowKey={data.work_hist_id}
                 columns={headers}
                 dataSource={data}
                 showHeader={true}

@@ -34,7 +34,7 @@ const HistoryDialog = ({ open, setOpen, record, setRecord, flag, setFlag }) => {
     //사용할 form  이름 설정
     const [dialogForm] = Form.useForm()
 
-    const id = dialogForm.getFieldValue("work_hist_id")
+    // const id = dialogForm.getFieldValue("work_hist_id")
     // console.log("현재 record     ", record)
     //레코드 데이터 세팅 하기
     dialogForm.setFieldsValue({ ...record, work_date: moment(record.work_date) || moment() })
@@ -70,6 +70,7 @@ const HistoryDialog = ({ open, setOpen, record, setRecord, flag, setFlag }) => {
         }
 
         testOptions().then((res) => {
+            console.log(res)
 
             const formatting = res.map(cus => {
                 const value = cus.customer_id
