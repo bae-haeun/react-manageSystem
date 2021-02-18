@@ -16,8 +16,6 @@ const Login = () => {
             const { data, status } = await login(values)
             console.log(status)
 
-
-
             switch (status) {
                 case 200:
                     // alert('로그인 성공')
@@ -35,7 +33,17 @@ const Login = () => {
                     window.location.reload()
             }
         } catch (error) {
-            console.log(error)
+            // console.log("00000000")
+            // console.log(error.response)
+
+            if (error.response.status === 402) {
+                alert('잘못된 이메일입니다')
+            } else if (error.response.status === 403) {
+                alert('잘못된 비밀번호입니다')
+            } else {
+                console.error(error)
+            }
+            window.location.reload()
         }
 
     }

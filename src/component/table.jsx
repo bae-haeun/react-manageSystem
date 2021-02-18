@@ -250,7 +250,7 @@ export default function StickyHeadTable() {
 
                 </Col>
             </Row>
-            <SearchArea searchOpen={searchOpen} setSearchOpen={setSearchOpen} ></SearchArea>
+            <SearchArea searchOpen={searchOpen} setSearchOpen={setSearchOpen} setSearchData={setSearchData}></SearchArea>
 
             <Divider orientation="left"></Divider>
             <Table
