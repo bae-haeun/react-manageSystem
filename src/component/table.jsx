@@ -171,6 +171,8 @@ export default function StickyHeadTable() {
             lookupHistory(searchData).then((res) => {
                 const { history, total } = res.data
 
+                console.log(history, total)
+
                 setData(history)
 
                 setTotal(total)
@@ -236,16 +238,16 @@ export default function StickyHeadTable() {
         <>
             <Row >
                 <Col className="gutter-row" span={6}>
-                    <Title level={2}>업무 수행 내역</Title>
+                    <Title style={{ paddingLeft: 30 }} level={4}>업무 수행 내역</Title>
                 </Col>
                 <Col className="gutter-row" span={12}>
                 </Col>
                 <Col className="gutter-row" span={6}>
-                    <Button type="primary" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={() => openDialog('create', {})}>내역 추가</Button>
+                    <Button type="primary" style={{ width: '170px', height: '30px', margin: '10px' }} onClick={() => openDialog('create', {})}>내역 추가</Button>
                     <Dialog open={open} setOpen={setOpen} record={record} setRecord={setRecord} flag={flag} setFlag={setFlag}>
                     </Dialog>
 
-                    <Button type="default" style={{ width: '100px', height: '30px', margin: '10px' }} onClick={openSearchArea}>검색 조건</Button>
+                    <Button type="default" style={{ width: '170px', height: '30px', margin: '10px' }} onClick={openSearchArea}>검색 조건</Button>
 
 
                 </Col>

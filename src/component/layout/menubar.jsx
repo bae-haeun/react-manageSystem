@@ -8,14 +8,14 @@ import {
     UploadOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
-// import Header from './header'
+import Header from './header'
 import Table from '../table'
 import './menubar.css'
 import { Link, Route, BrowserRouter, Switch, useHistory } from "react-router-dom"
 import Customer from '../customer'
-import { logout } from '../../api/user'
 
-const { Header, Sider, Content } = Layout;
+
+const { Sider, Content } = Layout;
 
 export default function Menubar() {
     const history = useHistory();
@@ -35,26 +35,12 @@ export default function Menubar() {
 
     };
 
-    const trylogout = async () => {
 
-        try {
-            const { status } = await logout()
-            console.log(status)
-
-            if (status === 200) {
-                alert('로그아웃 되었습니다')
-                history.push("/login")
-            }
-        } catch (error) {
-            console.log(error)
-        }
-
-
-    }
 
     return (
-        // <Router>
         <BrowserRouter>
+
+
 
             <Layout style={{
                 height: '100vh',
@@ -62,14 +48,14 @@ export default function Menubar() {
             }}>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className="logo" />
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
-                        <Menu.Item key="1" icon={<UserOutlined />}>
+                    <Menu theme="dark" mode="inline" >
+                        <Menu.Item key="1" icon={<MenuUnfoldOutlined />}>
                             <Link to="/">
                                 main
                             </Link>
 
                         </Menu.Item>
-                        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                        <Menu.Item key="2" icon={<UserOutlined />}>
                             <Link to="/customer">
                                 customer
                     </Link>
@@ -82,21 +68,18 @@ export default function Menubar() {
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background" style={{
+                    {/* <Header className="site-layout-background" style={{
                         padding: 0, display: 'flex',
                         flexDirection: 'row', justifyContent: 'space-between'
                     }}>
-                        {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                        className: 'trigger',
-                        onClick: toggle,
-                    })} */}
                         <img src={'/images/logo.png'} className='trigger'
                             onClick={toggle} />
                         <Button onClick={trylogout} type="ghost" style={{ border: 'none', width: 80, height: 80 }} icon={<LogoutOutlined />}></Button>
-                        {/* <LogoutOutlined /> */}
+                    </Header> */}
+                    <Header>
+
+
                     </Header>
-                    {/* <Header collapsed={collapsed} setCollapsed={setCollapsed}>
-                </Header> */}
                     <Content
                         className="site-layout-background"
                         style={{
@@ -121,9 +104,6 @@ export default function Menubar() {
             </Layout>
 
         </BrowserRouter>
-        // <Route exact path="/main" component={Table} />
-        // <Route exact path="/customer" component={Customer} />
-        // </Router>
     );
 };
 
