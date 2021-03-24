@@ -24,7 +24,7 @@ const Customer = (props) => {
   const [customerItem, setCustomerItem] = useState({});
 
   const input = "";
-  console.log("##", customer);
+  // console.log("##", customer);
   useEffect(() => {
     const testOptions = async () => {
       try {
@@ -121,14 +121,15 @@ const Customer = (props) => {
                     showCustomerPop(item);
                   }}
                 >
-                  {item}
+                  {item.customer_nm}
                 </List.Item>
               )}
             />
             <CustomerDialog
               open={customerOpen}
               setOpen={setCustomerOpen}
-              item={customerItem}
+              customer={customerItem}
+              setCustomer={setCustomerItem}
             ></CustomerDialog>
             {/* {customer} */}
           </Card>
