@@ -34,7 +34,7 @@ const Customer = (props) => {
 
         //   setCustomer(result);
         setCustomer(result);
-        console.log(customer);
+        // console.log(customer);
       } catch (error) {
         console.error(error);
       }

@@ -2,17 +2,50 @@ import React, { useState } from "react";
 import { Modal, Button, Input, Row, Col } from "antd";
 import { Table } from "antd";
 // import NoticeDialog from "./noticeDialog";
-import { updateCustomer, getCustomerDept } from "../api/setting";
+import {
+  updateCustomer,
+  getCustomerDept,
+  updateCustomerDept,
+} from "../api/setting";
 import { useEffect } from "react";
-import { ContactsOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { SELECTION_NONE } from "antd/lib/table/hooks/useSelection";
 
 const columns = [
   {
     title: "고객사 부서명",
     dataIndex: "customer_dept_nm",
     key: "customer_dept_id",
+    // width: "70%",
   },
+  //   {
+  //     title: "",
+  //     dataIndex: "",
+  //     key: "x",
+  //     width: "30%",
+  //     render: () => (
+  //       <div>
+  //         <Button>
+  //           <DeleteOutlined />
+  //         </Button>
+  //         <Button>
+  //           <EditOutlined />
+  //         </Button>
+  //       </div>
+  //     ),
+  //   },
 ];
+
+// const onRow = (record, rowIndex) => {
+//   return {
+//     onClick: (event) => {
+//       // record: row의 data
+//       // rowIndex: row의 index
+//       // event: event prototype
+//       console.log(record, rowIndex, event);
+//     },
+//   };
+// };
 
 const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   //   console.log(item);
@@ -25,6 +58,9 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   const [noticeTitle, setNoticeTitle] = useState("");
   const [noticeContent, setNoticeContent] = useState("");
   const [noticeOpen, setnoticeOpen] = useState(false);
+
+  const [new_customer_dept_nm, setNewCusDeptNm] = useState("");
+  //   const new_customer_dept_nm = ""
 
   useEffect(() => {
     setCustomerInfo(customer);
@@ -74,6 +110,25 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
     setcustomerDept(customerDeptList);
   };
 
+  const test = (event) => {
+    // console.log(event);
+    setNewCusDeptNm(event.target.value);
+  };
+
+  //고객사 부서 이름 수정
+  const save = async (record) => {
+    try {
+      const { status, message } = await updateCustomerDept(
+        { customer_dept_nm: new_customer_dept_nm },
+        `${customer.customer_id}/${record.customer_dept_id}`
+      );
+
+      console.log(status, message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Modal
       visible={open}
@@ -96,7 +151,6 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
             value={customer.customer_nm}
             onChange={onInputchange}
           />
-          {/* {customer.customer_nm} */}
         </Col>
         <Col style={{ width: "20%" }}>
           <Button
@@ -115,6 +169,34 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
         // scroll={{ y: 240 }}
         pagination={false}
         style={{ marginTop: "30px" }}
+        // onRow={onRow}
+        rowKey={(record) => {
+          return record.customer_dept_id;
+        }}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p style={{ margin: 0 }}>
+              <Row>
+                <Col style={{ width: "75%" }}>
+                  <Input
+                    type="text"
+                    // value={new_customer_dept_nm}
+                    defaultValue={record.customer_dept_nm}
+                    style={{ width: 300, marginLeft: 20, marginRight: 20 }}
+                    allowClear
+                    onChange={test}
+                  />
+                </Col>
+                <Col style={{ width: "25%" }}>
+                  <Button onClick={save}>수정</Button>
+                  <Button>삭제</Button>
+                </Col>
+              </Row>
+              {/* {record.customer_nm} */}
+            </p>
+          ),
+          //   expandRowByClick: true,
+        }}
       ></Table>
     </Modal>
   );
