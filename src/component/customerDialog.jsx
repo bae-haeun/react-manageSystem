@@ -61,9 +61,9 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   const [newCustomerDeptNm, setNewCustomerDeptNm] = useState("");
   //   const new_customer_dept_nm = ""
 
-  useEffect(() => {
-    setCustomerInfo(customer);
-  }, []);
+  //   useEffect(() => {
+  //     setCustomerInfo(customer);
+  //   }, []);
 
   useEffect(() => {
     setCustomerInfo(customer);
@@ -114,11 +114,12 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   const deleteCustomerDept = useCallback(async (record) => {
     try {
       console.log(record);
+
       const { status, message } = await deleteCustomerDept(
         `${record.customer_id}/${record.customer_dept_id}`
       );
 
-      console.log(status, message);
+      //   console.log(status, message);
     } catch (error) {
       console.error(error);
     }
