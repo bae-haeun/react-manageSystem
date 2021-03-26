@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Modal, Button, Input, Row, Col } from "antd";
 import { Table } from "antd";
 // import NoticeDialog from "./noticeDialog";
@@ -6,10 +6,9 @@ import {
   updateCustomer,
   getCustomerDept,
   updateCustomerDept,
+  deleteCustomerDept,
 } from "../api/setting";
-import { useEffect } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { SELECTION_NONE } from "antd/lib/table/hooks/useSelection";
+import NoticeDialog from "./noticeDialog";
 
 const columns = [
   {
@@ -59,7 +58,7 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   const [noticeContent, setNoticeContent] = useState("");
   const [noticeOpen, setnoticeOpen] = useState(false);
 
-  const [new_customer_dept_nm, setNewCusDeptNm] = useState("");
+  const [newCustomerDeptNm, setNewCustomerDeptNm] = useState("");
   //   const new_customer_dept_nm = ""
 
   useEffect(() => {
@@ -88,9 +87,7 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
       });
       console.log(newCostomerName);
       // setNew('')
-      // setnoticeOpen(true)
-      // setNoticeTitle('알림')
-      // setNoticeContent('고객사가 수정되었습니다.')
+
       handleClickOpen();
     } catch (err) {
       console.error(err);
@@ -110,95 +107,126 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
     setcustomerDept(customerDeptList);
   };
 
-  const test = (event) => {
-    // console.log(event);
-    setNewCusDeptNm(event.target.value);
+  const handleNewDeptNm = (event) => {
+    setNewCustomerDeptNm(event.target.value);
   };
 
-  //고객사 부서 이름 수정
-  const save = async (record) => {
+  const deleteCustomerDept = useCallback(async (record) => {
     try {
-      const { status, message } = await updateCustomerDept(
-        { customer_dept_nm: new_customer_dept_nm },
-        `${customer.customer_id}/${record.customer_dept_id}`
+      console.log(record);
+      const { status, message } = await deleteCustomerDept(
+        `${record.customer_id}/${record.customer_dept_id}`
       );
 
       console.log(status, message);
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
   return (
-    <Modal
-      visible={open}
-      title="고객사 상세 정보"
-      onOk={handleClickOpen}
-      onCancel={handleClickOpen}
-      footer={[
-        <Button key="submit" type="primary">
-          삭제
-        </Button>,
-        <Button type="primary" onClick={handleClickOpen}>
-          취소
-        </Button>,
-      ]}
-    >
-      <Row>
-        <Col style={{ width: "80%" }}>
-          <Input
-            type="text"
-            value={customer.customer_nm}
-            onChange={onInputchange}
-          />
-        </Col>
-        <Col style={{ width: "20%" }}>
-          <Button
-            type="primary"
-            onClick={update}
-            style={{ marginLeft: "30px" }}
-          >
-            수정
-          </Button>
-        </Col>
-      </Row>
-      <Table
-        columns={columns}
-        dataSource={customerDept}
-        size="small"
-        // scroll={{ y: 240 }}
-        pagination={false}
-        style={{ marginTop: "30px" }}
-        // onRow={onRow}
-        rowKey={(record) => {
-          return record.customer_dept_id;
-        }}
-        expandable={{
-          expandedRowRender: (record) => (
-            <p style={{ margin: 0 }}>
-              <Row>
-                <Col style={{ width: "75%" }}>
-                  <Input
-                    type="text"
-                    // value={new_customer_dept_nm}
-                    defaultValue={record.customer_dept_nm}
-                    style={{ width: 300, marginLeft: 20, marginRight: 20 }}
-                    allowClear
-                    onChange={test}
-                  />
-                </Col>
-                <Col style={{ width: "25%" }}>
-                  <Button onClick={save}>수정</Button>
-                  <Button>삭제</Button>
-                </Col>
-              </Row>
-              {/* {record.customer_nm} */}
-            </p>
-          ),
-          //   expandRowByClick: true,
-        }}
-      ></Table>
-    </Modal>
+    <>
+      <NoticeDialog
+        open={noticeOpen}
+        setOpen={setnoticeOpen}
+        title={noticeTitle}
+        content={noticeContent}
+      />
+      <Modal
+        visible={open}
+        title="고객사 상세 정보"
+        onOk={handleClickOpen}
+        onCancel={handleClickOpen}
+        footer={[
+          <Button key="submit" type="primary">
+            삭제
+          </Button>,
+          <Button type="primary" onClick={handleClickOpen}>
+            취소
+          </Button>,
+        ]}
+      >
+        <Row>
+          <Col style={{ width: "80%" }}>
+            <Input
+              type="text"
+              value={customer.customer_nm}
+              onChange={onInputchange}
+            />
+          </Col>
+          <Col style={{ width: "20%" }}>
+            <Button
+              type="primary"
+              onClick={update}
+              style={{ marginLeft: "30px" }}
+            >
+              수정
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          columns={columns}
+          dataSource={customerDept}
+          size="small"
+          // scroll={{ y: 240 }}
+          pagination={false}
+          style={{ marginTop: "30px" }}
+          // onRow={onRow}
+          rowKey={(record) => {
+            return record.customer_dept_id;
+          }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <p style={{ margin: 0 }}>
+                <Row>
+                  <Col style={{ width: "75%" }}>
+                    <Input
+                      type="text"
+                      // value={new_customer_dept_nm}
+                      defaultValue={record.customer_dept_nm}
+                      style={{ width: 300, marginLeft: 20, marginRight: 20 }}
+                      allowClear
+                      onChange={handleNewDeptNm}
+                    />
+                  </Col>
+                  <Col style={{ width: "25%" }}>
+                    <Button
+                      onClick={async () => {
+                        //고객사 부서 이름 수정
+
+                        try {
+                          const { status } = await updateCustomerDept(
+                            { customer_dept_nm: newCustomerDeptNm },
+                            `${customer.customer_id}/${record.customer_dept_id}`
+                          );
+
+                          //   console.log(status, message);
+                          if (status === 200) {
+                            setnoticeOpen(true);
+                            setNoticeTitle("알림");
+                            setNoticeContent("고객사부서가 수정되었습니다.");
+                            getCustomerDeptList(customer);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      }}
+                    >
+                      수정
+                    </Button>
+                    <Button onClick={() => deleteCustomerDept(record)}>
+                      삭제
+                    </Button>
+                  </Col>
+                </Row>
+                {/* {record.customer_nm} */}
+              </p>
+            ),
+            //   expandRowByClick: true,
+          }}
+        ></Table>
+      </Modal>
+    </>
   );
 };
 

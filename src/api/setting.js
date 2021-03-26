@@ -14,8 +14,18 @@ export function getCustomerDept(query) {
 }
 
 //고객사 부서 수정
-export function updateCustomerDept(data) {
-  return axios.update("/customerDept", data);
+export function updateCustomerDept(data, id) {
+  console.log("data", data);
+  console.log("id", id);
+
+  return axios.put(`/customerDept/${id}`, data);
+}
+
+//고객사 부서 삭제
+export function deleteCustomerDept(id) {
+  console.log(id);
+
+  return axios.delete(`/customerDept/${id}`);
 }
 
 export function addCustomer(data) {
