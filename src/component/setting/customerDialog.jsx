@@ -7,48 +7,20 @@ import {
   getCustomerDept,
   updateCustomerDept,
   deleteCustomerDept,
-} from "../api/setting";
-import NoticeDialog from "./noticeDialog";
+} from "../../api/setting";
+import NoticeDialog from "../noticeDialog";
 
 const columns = [
   {
     title: "고객사 부서명",
     dataIndex: "customer_dept_nm",
     key: "customer_dept_id",
-    // width: "70%",
   },
-  //   {
-  //     title: "",
-  //     dataIndex: "",
-  //     key: "x",
-  //     width: "30%",
-  //     render: () => (
-  //       <div>
-  //         <Button>
-  //           <DeleteOutlined />
-  //         </Button>
-  //         <Button>
-  //           <EditOutlined />
-  //         </Button>
-  //       </div>
-  //     ),
-  //   },
 ];
 
-// const onRow = (record, rowIndex) => {
-//   return {
-//     onClick: (event) => {
-//       // record: row의 data
-//       // rowIndex: row의 index
-//       // event: event prototype
-//       console.log(record, rowIndex, event);
-//     },
-//   };
 // };
 
 const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
-  //   console.log(item);
-  // const newCostomerName = ''
   const [newCostomerName, setNew] = useState("");
   const [customerDept, setcustomerDept] = useState([
     { customer_id: "", customer_nm: "", use_yn: "" },
@@ -59,6 +31,7 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
   const [noticeOpen, setnoticeOpen] = useState(false);
 
   const [newCustomerDeptNm, setNewCustomerDeptNm] = useState("");
+
   //   const new_customer_dept_nm = ""
 
   //   useEffect(() => {
@@ -119,7 +92,7 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
         `${record.customer_id}/${record.customer_dept_id}`
       );
 
-      //   console.log(status, message);
+      console.log(status, message);
     } catch (error) {
       console.error(error);
     }
@@ -178,7 +151,7 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
           }}
           expandable={{
             expandedRowRender: (record) => (
-              <p style={{ margin: 0 }}>
+              <div style={{ margin: 0 }}>
                 <Row>
                   <Col style={{ width: "75%" }}>
                     <Input
@@ -215,13 +188,32 @@ const CustomerDialog = ({ open, setOpen, customer, setCustomer }) => {
                     >
                       수정
                     </Button>
-                    <Button onClick={() => deleteCustomerDept(record)}>
+                    <Button
+                      onClick={async (record) => {
+                        // deleteCustomerDept(record); //안돼는 이유 확인하기 ㅜ
+
+                        try {
+                          //   console.log(`${record.customer_id}/${record.customer_dept_id}`);
+                          const { status, message } = await deleteCustomerDept(
+                            `${record.customer_id}/${record.customer_dept_id}`
+                          );
+                          if (status === 200) {
+                            setnoticeOpen(true);
+                            setNoticeTitle("알림");
+                            setNoticeContent("고객사부서가 삭제되었습니다.");
+                            getCustomerDeptList(customer);
+                          }
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      }}
+                    >
                       삭제
                     </Button>
                   </Col>
                 </Row>
                 {/* {record.customer_nm} */}
-              </p>
+              </div>
             ),
             //   expandRowByClick: true,
           }}

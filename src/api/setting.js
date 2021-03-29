@@ -35,3 +35,8 @@ export function addCustomer(data) {
 export function updateCustomer(id, data) {
   return axios.put(`/customer/${id}`, data);
 }
+
+//솔루션
+export function getSolution() {
+  return axios.get("/solution");
+}
