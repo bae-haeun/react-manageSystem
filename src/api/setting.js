@@ -40,3 +40,15 @@ export function updateCustomer(id, data) {
 export function getSolution() {
   return axios.get("/solution");
 }
+
+export function addSolution(data) {
+  return axios.post("/solution", data);
+}
+
+export function updateSolution(id, data) {
+  return axios.put(`/solution/${id}`, data);
+}
+
+export function deleteSolution(id, data) {
+  return axios.delete(`/solution/${id}`, data);
+}
