@@ -21,6 +21,9 @@ const Solution = () => {
   const [noticeContent, setNoticeContent] = useState("");
   const [noticeOpen, setnoticeOpen] = useState(false);
 
+  //수정 선택한 solution
+  const [solution, setSolution] = useState({});
+
   const [solutionOpen, setSolutionOpen] = useState(false);
 
   useEffect(() => {
@@ -75,8 +78,9 @@ const Solution = () => {
     }
   };
 
-  const showUpdatePopUp = () => {
+  const showUpdatePopUp = (solution) => {
     setSolutionOpen(true);
+    setSolution(solution);
   };
 
   return (
@@ -90,6 +94,7 @@ const Solution = () => {
       <SolutionDialog
         open={solutionOpen}
         setOpen={setSolutionOpen}
+        solution={solution}
       ></SolutionDialog>
       <Card style={{ width: "60%", height: "100%" }} title="솔루션 목록">
         <List
@@ -123,7 +128,10 @@ const Solution = () => {
             <List.Item
               key={item.solution_id}
               actions={[
-                <div key="list-loadmore-edit" onClick={showUpdatePopUp}>
+                <div
+                  key="list-loadmore-edit"
+                  onClick={() => showUpdatePopUp(item)}
+                >
                   수정
                 </div>,
                 <div
